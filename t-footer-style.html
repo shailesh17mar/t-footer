@@ -1,27 +1,30 @@
 <style id="t-footer-style">
 :host{
-	--number-of-columns: 5;
+}
+.social-links iron-icon{ 
+  margin: 0 5px;
 }
 .contact-label{
 	color: #fff;
+  margin-right: 20px;
 	font-size: 14px;
 }
 .footer{
-	background:#465363
+	background: var(--t-footer-bg,#465363)
 }
 	.selected-tab{
-		background: #465363;
-		color: #fff;
+		background: var(--t-footer-selected-tab-bg, #465363);
+		color: var(--t-footer-selected-tab-color, #fff);
 	}
 	.section{
 		margin: 0px 150px;
-		color: #9a9ca8;
+		color: var(--t-footer-section-bg,#9a9ca8);
 	}
 	.contact-section{
 		padding: 0 20px;
     height: 50px;
     line-height: 50px;
-		background: #39434f;
+		background: var(--t-footer-contact-bg,#39434f);
 		clear: both;
 		margin: 0px 150px;
 	}
@@ -39,8 +42,8 @@
 	}
 	.tabs{
 		padding: 0 100px;
-		background: #39434f;
-		color: #9a9ca8;
+		background: var(--t-footer-tab-bg,#39434f);
+		color: var(--t-footer-tab-color,#9a9ca8);
 	}
 
 	paper-tab{
@@ -50,8 +53,8 @@
 	iron-pages {
 		min-height: 200px;
 		margin: 20px 100px;
-		background: #465363;
-		color: #9a9ca8;
+		background: var(--t-footer-content-bg, #465363);
+		color: var(--t-footer-content-color,#9a9ca8);
 	}
 	.items{
 		list-style: none;
@@ -103,7 +106,12 @@
 		}
 	}
   @media only screen and (min-width : 320px) and (max-width : 480px) {
-
+    .contact-label{
+      margin-right: 0;
+    }
+    .social-links{
+      padding: 10px 0;
+    }
     .link-list li{
       padding: 5px 1%;
       width: 31%;
