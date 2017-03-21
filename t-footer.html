@@ -1,0 +1,158 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-footer-panel/paper-header-panel.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-icon-item.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../iron-icons/maps-icons.html">
+<link rel="import" href="../iron-icons/communication-icons.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="./t-footer-style.html">
+
+<!--
+	`t-footer`
+	Footer component
+
+	@demo demo/index.html 
+-->
+
+<dom-module id="t-footer">
+	<template>
+		<style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
+		<div class="layout footer">
+			<iron-media-query query="(max-width: 1024px) and (min-width: 700px)" query-matches="{{isTablet}}"></iron-media-query>
+			<iron-media-query query="(min-device-width : 320px) and (max-device-width : 480px)" query-matches="{{isMobile}}"></iron-media-query>
+			<paper-tabs scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{selected}}">
+				<paper-tab>Domestic Destinations</paper-tab>
+				<paper-tab>International Destinations</paper-tab>
+				<paper-tab>Domestic Flights</paper-tab>
+				<paper-tab>International Flights</paper-tab>
+				<paper-tab>Popular Activities</paper-tab>
+			</paper-tabs>
+			<iron-pages class="pages flex vertical layout " selected="{{selected}}">
+				<div >
+					<ul class="items">
+						<li>Abu Dhabi Hotels</li>
+						<li>AC Hotels</li>
+						<li>AccorHotels</li>
+						<li>Ace Hotel</li>
+						<li>Adagio (hotel)</li>
+						<li>Aerowisata</li>
+						<li>Affinia Hotel</li>
+						<li>Aitken Spence</li>
+						<li>AJ Capital</li>
+						<li>Allegro Resorts</li>
+						<li>Aloft Hotels</li>
+						<li>Aman Resorts</li>
+						<li>Amari Hotels </li>
+						<li>America's Best </li>
+						<li>AmericInn</li>
+						<li>AMResorts</li>
+						<li>APA Group</li>
+						<li>Aqua Hotels </li>
+						<li>Aqueen Hotels</li>
+						<li>Archipelago International</li>
+						<li>Arp-Hansen Hotel </li>
+						<li>Autograph Hotels</li>
+						<li>Azimut Hotels</li>
+					</ul>
+				</div>
+				<div>
+					tab 2
+				</div>
+			</iron-pages>
+			<div class="layout vertical contact-section section">
+				<div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout contact-us" >
+					<div class="contact-label">Contact Us</div>
+					<div class$="{{centerAlignIfResponsive(notDesktop)}} flex  layout details" >
+						<div>Ph: +215(801) 2467, +215(804)1234</div>
+						<div>Fax: +215-123-4531</div>
+						<div>Email: enquiry@tavisca.com</div>
+					</div>
+				</div>
+				<div hidden$="[[isTablet]]" class$="{{handleFollowAlignment(isMobile)}} layout follow-us"  >
+					<div class="contact-label">Follow Us</div>
+					<div class="social-links">
+						<iron-icon icon="add" />
+					</div>
+				</div>
+			</div>
+			<div class$="{{centerAlignIfResponsive(notDesktop)}} contact-section layout follow-us" hidden$="[[!isTablet]]" >
+				<div class="contact-label">Follow Us</div>
+				<div class="social-links">
+					<!-- <iron&#45;icon icon="add" /> -->
+				</div>
+			</div>
+
+			<div class="layout horizontal copyright-section section">
+
+				<div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout links" >
+					<ul class="flex link-list">
+						<li>About Us</li>
+						<li>Privacy Policy</li>
+						<li>Terms Of Use</li>
+						<li>Contact Us</li>
+						<li>Developer API</li>
+						<li>Legal Disclamer</li>
+					</ul>
+				</div>
+
+				<div hidden$="[[notDesktop]]"  class="copyright end-justified">
+					&copy; MystiqueDemo. All rights Reserved
+				</div>
+			</div>
+			<div hidden$="[[!notDesktop]]"  class="copyright-section section horizontal layout center-justified">
+				&copy; MystiqueDemo. All rights Reserved
+			</div>
+	</template>
+		</div>
+		</template>
+
+		<script>
+Polymer({
+
+	is: 't-footer',
+
+	properties: {
+		selected:{
+			type: Number,
+			value: 0
+		},
+		notDesktop: {
+			type: Boolean,
+			// when `first` or `last` changes `computeFullName` is called once
+			// and the value it returns is stored as `fullName`
+			computed: 'isSmallScreen(isTablet, isMobile)'
+		}
+	},
+
+	isSmallScreen: function(isTablet, isMobile){
+		return isTablet || isMobile;
+	},
+
+	centerAlignIfResponsive: function(notDesktop){
+		if(this.isTablet)
+			return "horizontal center-justified";
+		if(this.isMobile)
+			return "vertical center-justified";
+		return "horizontal";
+	},
+
+	handleFollowAlignment: function(isMobile){
+		return isMobile? "center-justified vertical": "end-justified horizontal";
+	}
+
+
+});
+		</script>
+</dom-module>
+
