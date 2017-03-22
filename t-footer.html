@@ -29,9 +29,8 @@
   <template>
     <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
     <iron-media-query query="(max-width: 1024px) and (min-width: 700px)" query-matches="{{isTablet}}"></iron-media-query>
-    <iron-media-query query="(min-device-width : 320px) and (max-device-width : 480px)" query-matches="{{isMobile}}"></iron-media-query>
+    <iron-media-query query="(min-width : 320px) and (max-width : 480px)" query-matches="{{isMobile}}"></iron-media-query>
     <div class="layout footer">
-
       <paper-tabs hidden$="[[_hideIfNoSections(sections)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{selected}}">
         <template is="dom-repeat" items="[[sections]]">
           <paper-tab>[[item.heading]]</paper-tab>
@@ -49,29 +48,29 @@
           </div>
         </template>
       </iron-pages>
-      <div class="layout vertical contact-section section">
+      <div class$="[[centerAlignIfResponsive(notDesktop)]] layout contact-section section">
         <div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout contact-us" >
           <div class="contact-label">[[contactSection.contactUs.heading]]</div>
-          <div class$="{{centerAlignIfResponsive(notDesktop)}} flex  layout details" >
-            <div>Ph: [[contactSection.contactUs.phone]]</div>
-            <div>Fax: [[contactSection.contactUs.fax]]</div>
-            <div>Email: [[contactSection.contactUs.email]]</div>
+          <div class$="{{centerAlignIfResponsive(notDesktop)}} layout details" >
+            <div>[[contactSection.contactUs.phone.label]]: [[contactSection.contactUs.phone.value]]</div>
+            <div>[[contactSection.contactUs.fax.label]]: [[contactSection.contactUs.fax.value]]</div>
+            <div>[[contactSection.contactUs.email.label]]: <a href$="mailto:@[[contactSection.contactUs.email.value]]">[[contactSection.contactUs.email.value]]</a></div>
           </div>
         </div>
-        <div hidden$="[[isTablet]]" class$="{{handleFollowAlignment(isMobile)}} layout follow-us"  >
+        <div hidden$="[[_hideIfContentOverflowHappens(contactSection.followUs.platforms, isMobile)]]" class$="[[handleFollowAlignment(isMobile) ]] wrap layout follow-us"  >
           <div class="contact-label">[[contactSection.followUs.heading]]</div>
-          <div class="social-links">
+          <div id="social" class="social-links">
             <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
-              <iron-icon src="[[item.icon]]"></iron-icon>
+              <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
             </template>
           </div>
         </div>
       </div>
-      <div class$="{{centerAlignIfResponsive(notDesktop)}} contact-section layout follow-us" hidden$="[[!isTablet]]" >
+      <div class$="{{centerAlignIfResponsive(notDesktop)}} contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(contactSection.followUs.platforms, isMobile)]]" >
         <div class="contact-label">[[contactSection.followUs.heading]]</div>
         <div class="social-links">
             <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
-              <iron-icon src="[[item.icon]]"></iron-icon>
+              <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
             </template>
         </div>
       </div>
@@ -82,7 +81,7 @@
         <div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout links" >
           <ul class="flex link-list">
             <template is="dom-repeat" items="[[footerLinks]]">
-              <li><a href="[[item.url]]">[[item.label]]</a></li>
+              <li><a href$="[[item.url]]">[[item.label]]</a></li>
             </template>
           </ul>
         </div>
@@ -102,18 +101,33 @@
 Polymer({
   is: 't-footer',
 
+  observers:[
+    '_arrangeSocialLinks(contactSection.followUs.platforms.splices, isMobile)'
+  ],
+
   properties: {
+isMobile:{
+      type: Boolean
+    },
+isTablet:{
+      type: Boolean
+    },
     sections:{
       type: Array
     },
     contactSection:{
       type: Object,
+      notify: true
     },
     copyright: {
       type: String
     },
     footerLinks:{
       type: Array
+    },
+    _arrangeSocialLinks: {
+        type: String,
+        computed: '_hideIfContentOverflowHappens(contactSection.followUs.platforms.splices,isMobile)'
     },
     selected:{
       type: Number,
@@ -140,10 +154,11 @@ Polymer({
   },
 
   centerAlignIfResponsive: function(notDesktop){
-    if(this.isTablet)
-      return "horizontal center-justified";
     if(this.isMobile)
-      return "vertical center-justified";
+      return "vertical ";
+    if(this._hideIfContentOverflowHappens(this.contactSection.followUs.platforms)){
+      return "horizontal center-justified";
+    }
     return "horizontal";
   },
 
@@ -153,6 +168,10 @@ Polymer({
 
   _hideIfNoSections: function(sections){
     return (!sections || sections.length === 0);
+  },
+
+  _hideIfContentOverflowHappens: function(platforms,isMobile){
+    return ((platforms && platforms.length> 5) || this.isTablet || this.isMobile);
   }
 });
     </script>
