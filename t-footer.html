@@ -28,16 +28,16 @@
 <dom-module id="t-footer">
   <template>
     <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
-    <iron-media-query query="(max-width: 1024px) and (min-width: 700px)" query-matches="{{isTablet}}"></iron-media-query>
-    <iron-media-query query="(min-width : 320px) and (max-width : 480px)" query-matches="{{isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px) and (min-width: 700px)" query-matches="{{_isTablet}}"></iron-media-query>
+    <iron-media-query query="(min-width : 320px) and (max-width : 480px)" query-matches="{{_isMobile}}"></iron-media-query>
     <div class="layout footer">
-      <paper-tabs hidden$="[[_hideIfNoSections(sections)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{selected}}">
+      <paper-tabs hidden$="[[_hideIfNoSections(sections)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections]]">
           <paper-tab>[[item.heading]]</paper-tab>
         </template>
       </paper-tabs>
 
-      <iron-pages hidden$="[[_hideIfNoSections(sections)]]" class="pages flex vertical layout " selected="{{selected}}">
+      <iron-pages hidden$="[[_hideIfNoSections(sections)]]" class="pages flex vertical layout " selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections]]">
           <div>
             <ul class="items">
@@ -48,16 +48,16 @@
           </div>
         </template>
       </iron-pages>
-      <div class$="[[centerAlignIfResponsive(notDesktop)]] layout contact-section section">
-        <div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout contact-us" >
+      <div class$="[[_centerAlignIfResponsive(_notDesktop)]] layout contact-section section">
+        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout contact-us" >
           <div class="contact-label">[[contactSection.contactUs.heading]]</div>
-          <div class$="{{centerAlignIfResponsive(notDesktop)}} layout details" >
+          <div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
             <div>[[contactSection.contactUs.phone.label]]: [[contactSection.contactUs.phone.value]]</div>
             <div>[[contactSection.contactUs.fax.label]]: [[contactSection.contactUs.fax.value]]</div>
             <div>[[contactSection.contactUs.email.label]]: <a href$="mailto:@[[contactSection.contactUs.email.value]]">[[contactSection.contactUs.email.value]]</a></div>
           </div>
         </div>
-        <div hidden$="[[_hideIfContentOverflowHappens(contactSection.followUs.platforms, isMobile)]]" class$="[[handleFollowAlignment(isMobile) ]] wrap layout follow-us"  >
+        <div hidden$="[[_hideIfContentOverflowHappens(contactSection.followUs.platforms, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout follow-us"  >
           <div class="contact-label">[[contactSection.followUs.heading]]</div>
           <div id="social" class="social-links">
             <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class$="{{centerAlignIfResponsive(notDesktop)}} contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(contactSection.followUs.platforms, isMobile)]]" >
+      <div class$="{{_centerAlignIfResponsive(_notDesktop)}} contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(contactSection.followUs.platforms, _isMobile)]]" >
         <div class="contact-label">[[contactSection.followUs.heading]]</div>
         <div class="social-links">
             <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
@@ -78,7 +78,7 @@
         <content></content>
       </div>
       <div class="layout horizontal copyright-section section">
-        <div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout links" >
+        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout links" >
           <ul class="flex link-list">
             <template is="dom-repeat" items="[[footerLinks]]">
               <li><a href$="[[item.url]]">[[item.label]]</a></li>
@@ -86,11 +86,11 @@
           </ul>
         </div>
 
-        <div hidden$="[[notDesktop]]"  class="copyright end-justified">
+        <div hidden$="[[_notDesktop]]"  class="copyright end-justified">
           &copy; [[copyright]]
         </div>
       </div>
-      <div hidden$="[[!notDesktop]]"  class="copyright-section section horizontal layout center-justified">
+      <div hidden$="[[!_notDesktop]]"  class="copyright-section section horizontal layout center-justified">
           &copy; [[copyright]]
       </div>
   </template>
@@ -102,14 +102,14 @@ Polymer({
   is: 't-footer',
 
   observers:[
-    '_arrangeSocialLinks(contactSection.followUs.platforms.splices, isMobile)'
+    '_arrangeSocialLinks(contactSection.followUs.platforms.splices, _isMobile)'
   ],
 
   properties: {
-isMobile:{
+_isMobile:{
       type: Boolean
     },
-isTablet:{
+_isTablet:{
       type: Boolean
     },
     sections:{
@@ -127,17 +127,17 @@ isTablet:{
     },
     _arrangeSocialLinks: {
         type: String,
-        computed: '_hideIfContentOverflowHappens(contactSection.followUs.platforms.splices,isMobile)'
+        computed: '_hideIfContentOverflowHappens(contactSection.followUs.platforms.splices,_isMobile)'
     },
-    selected:{
+    _selected:{
       type: Number,
       value: 0
     },
-    notDesktop: {
+    _notDesktop: {
       type: Boolean,
       // when `first` or `last` changes `computeFullName` is called once
       // and the value it returns is stored as `fullName`
-      computed: 'isSmallScreen(isTablet, isMobile)'
+      computed: '_isSmallScreen(_isTablet, _isMobile)'
     },
     _hideIfNoChildren:{
       type: Boolean,
@@ -149,12 +149,12 @@ isTablet:{
     this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
   },
 
-  isSmallScreen: function(isTablet, isMobile){
-    return isTablet || isMobile;
+  _isSmallScreen: function(_isTablet, _isMobile){
+    return _isTablet || _isMobile;
   },
 
-  centerAlignIfResponsive: function(notDesktop){
-    if(this.isMobile)
+  _centerAlignIfResponsive: function(_notDesktop){
+    if(this._isMobile)
       return "vertical ";
     if(this._hideIfContentOverflowHappens(this.contactSection.followUs.platforms)){
       return "horizontal center-justified";
@@ -162,16 +162,16 @@ isTablet:{
     return "horizontal";
   },
 
-  handleFollowAlignment: function(isMobile){
-    return isMobile? "center-justified vertical": "end-justified horizontal";
+  _handleFollowAlignment: function(_isMobile){
+    return _isMobile? "center-justified vertical": "end-justified horizontal";
   },
 
   _hideIfNoSections: function(sections){
     return (!sections || sections.length === 0);
   },
 
-  _hideIfContentOverflowHappens: function(platforms,isMobile){
-    return ((platforms && platforms.length> 5) || this.isTablet || this.isMobile);
+  _hideIfContentOverflowHappens: function(platforms,_isMobile){
+    return ((platforms && platforms.length> 5) || this._isTablet || this._isMobile);
   }
 });
     </script>
