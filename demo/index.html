@@ -19,6 +19,202 @@ body{
     </style>
   </head>
   <body>
-          <t-footer></t-footer>
+    <template is="dom-bind" id="t-footer-emulator">
+          <t-footer sections="[[sections]]" contact-section="[[contactSection]]" footer-links="[[footerLinks]]" copyright="[[copyright]]"  ></t-footer>
+    </template>
+    <script >
+      var t = document.querySelector('#t-footer-emulator');
+      t.sections = [
+      {
+        heading:"International Destinations",
+        items:[
+          "Abu Dhabi Hotels",
+          "AC Hotels",
+          "AccorHotels",
+          "Ace Hotel",
+          "Adagio (hotel)",
+          "Aerowisata",
+          "Affinia Hotel",
+          "Aitken Spence",
+          "AJ Capital",
+          "Allegro Resorts",
+          "Aloft Hotels",
+          "Aman Resorts",
+          "Amari Hotels ",
+          "America's Best ",
+          "AmericInn",
+          "AMResorts",
+          "APA Group",
+          "Aqua Hotels ",
+          "Aqueen Hotels",
+          "Archipelago International",
+          "Arp-Hansen Hotel ",
+          "Autograph Hotels",
+          "Azimut Hotels"
+            ]
+      },
+      {
+        heading:"Domestic Flights",
+        items:[
+          "Abu Dhabi Hotels",
+          "AC Hotels",
+          "AccorHotels",
+          "Ace Hotel",
+          "Adagio (hotel)",
+          "Aerowisata",
+          "Affinia Hotel",
+          "Aitken Spence",
+          "AJ Capital",
+          "Allegro Resorts",
+          "Aloft Hotels",
+          "Aman Resorts",
+          "Amari Hotels ",
+          "America's Best ",
+          "AmericInn",
+          "AMResorts",
+          "APA Group",
+          "Aqua Hotels ",
+          "Aqueen Hotels",
+          "Archipelago International",
+          "Arp-Hansen Hotel ",
+          "Autograph Hotels",
+          "Azimut Hotels"
+            ]
+      },
+      {
+        heading:"International Flights",
+        items:[
+          "Abu Dhabi Hotels",
+          "AC Hotels",
+          "AccorHotels",
+          "Ace Hotel",
+          "Adagio (hotel)",
+          "Aerowisata",
+          "Affinia Hotel",
+          "Aitken Spence",
+          "AJ Capital",
+          "Allegro Resorts",
+          "Aloft Hotels",
+          "Aman Resorts",
+          "Amari Hotels ",
+          "America's Best ",
+          "AmericInn",
+          "AMResorts",
+          "APA Group",
+          "Aqua Hotels ",
+          "Aqueen Hotels",
+          "Archipelago International",
+          "Arp-Hansen Hotel ",
+          "Autograph Hotels",
+          "Azimut Hotels"
+            ]
+      },
+      {
+        heading: "Domestic Destinations",
+        items:[
+          "Abu Dhabi Hotels",
+          "AC Hotels",
+          "AccorHotels",
+          "Ace Hotel",
+          "Adagio (hotel)",
+          "Aerowisata",
+          "Affinia Hotel",
+          "Aitken Spence",
+          "AJ Capital",
+          "Allegro Resorts",
+          "Aloft Hotels",
+          "Aman Resorts",
+          "Amari Hotels ",
+          "America's Best ",
+          "AmericInn",
+          "AMResorts",
+          "APA Group",
+          "Aqua Hotels ",
+          "Aqueen Hotels",
+          "Archipelago International",
+          "Arp-Hansen Hotel ",
+          "Autograph Hotels",
+          "Azimut Hotels"
+            ]
+      },
+      {
+        heading:"Popular Activities",
+        items:[
+          "Abu Dhabi Hotels",
+          "AC Hotels",
+          "AccorHotels",
+          "Ace Hotel",
+          "Adagio (hotel)",
+          "Aerowisata",
+          "Affinia Hotel",
+          "Aitken Spence",
+          "AJ Capital",
+          "Allegro Resorts",
+          "Aloft Hotels",
+          "Aman Resorts",
+          "Amari Hotels ",
+          "America's Best ",
+          "AmericInn",
+          "AMResorts",
+          "APA Group",
+          "Aqua Hotels ",
+          "Aqueen Hotels",
+          "Archipelago International",
+          "Arp-Hansen Hotel ",
+          "Autograph Hotels",
+          "Azimut Hotels"
+            ]
+      }
+      ];
+      t.contactSection = {
+        contactUs:{
+          heading: 'Contact Us',
+          phone:'+215(801) 2467, +215(804)1234',
+          fax:'+215-123-4531',
+          email:'enquiry@tavisca.com'
+        },
+        followUs:{
+          heading: 'Follow Us',
+          platforms:[{
+          icon: 'https://image.flaticon.com/icons/svg/174/174855.svg',
+          label: 'Instagram'
+        },
+        {
+          icon: 'https://image.flaticon.com/icons/svg/174/174848.svg',
+          label: 'Facebook'
+        },
+        {
+          icon: 'https://image.flaticon.com/icons/svg/174/174876.svg',
+          label: 'Twitter'
+        }] }
+      };
+      t.footerLinks = [
+      {
+        label: 'Developer API',
+        url:''
+      },
+      {
+        label:'About Us',
+        url:''
+      },
+      {
+        label:'Privacy Policy',
+        url:''
+      },
+      {
+        label:'Terms Of Use',
+        url:''
+      },
+      {
+        label:'Legal Disclamer',
+        url:''
+      },
+      {
+        label:'Contact Us',
+        url:''
+      }
+      ];
+      t.copyright = 'MystiqueDemo. All rights Reserved';
+    </script>
   </body>
 </html>
