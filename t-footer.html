@@ -32,18 +32,18 @@
     <iron-media-query query="(min-device-width : 320px) and (max-device-width : 480px)" query-matches="{{isMobile}}"></iron-media-query>
     <div class="layout footer">
 
-      <paper-tabs scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{selected}}">
+      <paper-tabs hidden$="[[_hideIfNoSections(sections)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{selected}}">
         <template is="dom-repeat" items="[[sections]]">
           <paper-tab>[[item.heading]]</paper-tab>
         </template>
       </paper-tabs>
 
-      <iron-pages class="pages flex vertical layout " selected="{{selected}}">
+      <iron-pages hidden$="[[_hideIfNoSections(sections)]]" class="pages flex vertical layout " selected="{{selected}}">
         <template is="dom-repeat" items="[[sections]]">
           <div>
             <ul class="items">
               <template is="dom-repeat" items="[[item.items]]" as="frequent">
-                <li>[[frequent]]</li>
+                <li><a href$="[[frequent.url]]">[[frequent.text]]</a></li>
               </template>
             </ul>
           </div>
@@ -75,7 +75,9 @@
             </template>
         </div>
       </div>
-
+      <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal copyright-section section">
+        <content></content>
+      </div>
       <div class="layout horizontal copyright-section section">
         <div class$="{{centerAlignIfResponsive(notDesktop)}} flex layout links" >
           <ul class="flex link-list">
@@ -122,7 +124,15 @@ Polymer({
       // when `first` or `last` changes `computeFullName` is called once
       // and the value it returns is stored as `fullName`
       computed: 'isSmallScreen(isTablet, isMobile)'
+    },
+    _hideIfNoChildren:{
+      type: Boolean,
+      value: true
     }
+  },
+
+  ready: function(){
+    this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
   },
 
   isSmallScreen: function(isTablet, isMobile){
@@ -139,6 +149,10 @@ Polymer({
 
   handleFollowAlignment: function(isMobile){
     return isMobile? "center-justified vertical": "end-justified horizontal";
+  },
+
+  _hideIfNoSections: function(sections){
+    return (!sections || sections.length === 0);
   }
 });
     </script>
