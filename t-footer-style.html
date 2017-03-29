@@ -1,6 +1,7 @@
 <dom-module id="t-footer-style">
 <style is="custom-style" >
 :host{
+  --number-of-columns: 6
 }
 .social-links iron-icon{ 
   margin: 0 5px;
@@ -67,7 +68,7 @@ a{
     font-size: 13px;
   }
   .items li{
-    width: calc(100%/var(--number-of-columns, 6) - 2% );
+    width: calc(100%/var(--number-of-columns) - 2% );
     padding: 5px 1%;
     float: left;
   }
@@ -81,7 +82,7 @@ a{
     float: left;
   }
 
-  @media screen and (max-width: 1024px) and (min-width: 700px) {
+  @media screen and (max-width: 1024px) and (min-width: 600px) {
     .link-list li{
       padding: 5px 1%;
     }
@@ -112,7 +113,7 @@ a{
       padding:10px 0;
     }
   }
-  @media only screen and (min-width : 320px) and (max-width : 480px) {
+  @media only screen and (min-width : 320px) and (max-width : 640px) {
     .contact-label{
       margin-right: 0;
     }
