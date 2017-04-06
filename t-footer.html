@@ -31,176 +31,196 @@
     <iron-media-query query="(max-width: 1024px) and (min-width: 600px)" query-matches="{{_isTablet}}"></iron-media-query>
     <iron-media-query query="(min-width : 320px) and (max-width : 640px)" query-matches="{{_isMobile}}"></iron-media-query>
     <div class="layout footer">
-      <paper-tabs hidden$="[[_hideIfNoSections(sections)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
-        <template is="dom-repeat" items="[[sections]]">
-          <paper-tab>[[item.heading]]</paper-tab>
+      <paper-tabs hidden$="[[_hideIfNoSections(sections.options)]]" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
+        <template is="dom-repeat" items="[[sections.options]]">
+          <paper-tab>[[item.title]]</paper-tab>
         </template>
       </paper-tabs>
 
-      <iron-pages hidden$="[[_hideIfNoSections(sections)]]" class="pages flex vertical layout " selected="{{_selected}}">
-        <template is="dom-repeat" items="[[sections]]">
+      <iron-pages hidden$="[[_hideIfNoSections(sections.options)]]" class="pages flex vertical layout " selected="{{_selected}}">
+        <template is="dom-repeat" items="[[sections.options]]">
           <div>
             <ul class="items">
-              <template is="dom-repeat" items="[[item.items]]" as="frequent">
-                <li><a href$="[[frequent.url]]">[[frequent.text]]</a></li>
+						<!-- <template is="dom&#45;if" if="[[!sections.openInNewTab]]" > -->
+            <!--   <template is="dom&#45;repeat" items="[[item.options]]" as="option"> -->
+            <!--     <li><a href$="[[option.url]]">[[option.title]]</a></li> -->
+            <!--   </template> -->
+            <!--   </template> -->
+						<template is="dom-if" if="[[sections.openInNewTab]]" >
+              <template is="dom-repeat" items="[[item.options]]" as="option">
+                <li><a target="_blank" href$="[[option.url]]">[[option.title]]</a></li>
+              </template>
               </template>
             </ul>
           </div>
         </template>
       </iron-pages>
-      <div hidden$="[[_hideIfContactSectionNotPresent(contactSection)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout contact-section section">
-        <div hidden$="[[_hideIfSectionNotPresent(contactSection.contactUs.items)]]" class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout contact-us" >
-          <div class="contact-label">[[contactSection.contactUs.heading]]</div>
-          <div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
-            <template is="dom-repeat" items="[[contactSection.contactUs.items]]" >
-              <div >[[item.label]]: [[item.value]]</div>
-            </template>
-          </div>
-        </div>
-        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(contactSection.followUs.platforms, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout follow-us"  >
-          <div class="contact-label">[[contactSection.followUs.heading]]</div>
-          <div id="social" class="social-links">
-            <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
-              <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
-            </template>
-          </div>
-        </div>
-      </div>
-      <div class$="[[ _centerAlignIfResponsive(_notDesktop) ]] contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(contactSection.followUs.platforms, _isMobile)]]" >
-        <div class="contact-label">[[contactSection.followUs.heading]]</div>
-        <div class="social-links">
-          <template is="dom-repeat" items="[[contactSection.followUs.platforms]]">
-            <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
-          </template>
-        </div>
-      </div>
-      <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal copyright-section section">
-        <content></content>
-      </div>
-      <div class="layout horizontal copyright-section section">
-        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout links" >
-          <ul class="flex link-list">
-            <template is="dom-repeat" items="[[footerLinks]]">
-              <li><a href$="[[item.url]]">[[item.label]]</a></li>
-            </template>
-          </ul>
-        </div>
+			<div hidden$="[[_hideIfPrimaryAndSecondaryLinksNotPresent(links)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout contact-section section">
+				<div hidden$="[[_hideIfSectionNotPresent(links.primaryLinks.options)]]" class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout contact-us" >
+					<div class="contact-label">[[links.primaryLinks.title]]</div>
+					<div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
+						<template is="dom-repeat" items="[[links.primaryLinks.options]]" >
+							<div >[[item.title]]
+								<template is="dom-repeat" items="[[item.options]]" as="option" >
+									<a href$="[[option.url]]">[[option.title]]</a>
+								</template>
+							</div>
+						</template>
+					</div>
+				</div>
+				<div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links.secondaryLinks.options, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout follow-us"  >
+					<div class="contact-label">[[links.secondaryLinks.title]]</div>
+					<div id="social" class="social-links">
+						<template is="dom-repeat" items="[[links.secondaryLinks.options]]">
+							<a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
+						</template>
+					</div>
+				</div>
+			</div>
+			<div class$="[[ _centerAlignIfResponsive(_notDesktop) ]] contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(links.secondaryLinks.options, _isMobile)]]" >
+				<div class="contact-label">[[links.secondaryLinks.title]]</div>
+				<div class="social-links">
+					<template is="dom-repeat" items="[[links.secondaryLinks.options]]">
+						<a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
+					</template>
+				</div>
+			</div>
+			<div hidden$="[[_hideIfNoChildren]]" class="layout horizontal copyright-section section">
+				<content></content>
+			</div>
+			<div class="layout horizontal copyright-section section">
+				<div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout links" >
+					<ul class="flex link-list">
+						<template is="dom-repeat" items="[[links.bottomStartLinks]]">
+							<li><a href$="[[item.url]]">[[item.title]]</a></li>
+						</template>
+					</ul>
+				</div>
 
-        <div hidden$="[[_notDesktop]]"  class="copyright end-justified">
-          &copy; [[copyright]]
-        </div>
-      </div>
-      <div hidden$="[[!_notDesktop]]"  class="copyright-section section horizontal layout center-justified">
-        &copy; [[copyright]]
-      </div>
-    </div>
+				<div hidden$="[[_notDesktop]]"  class="copyright end-justified">
+					<template is="dom-repeat" items="[[links.bottomEndLinks]]">
+				<a href$="[[item.url]]">[[item.title]]</a>
+					</template>
+				</div>
+			</div>
+			<div hidden$="[[!_notDesktop]]"  class="copyright-section section horizontal layout center-justified">
+					<template is="dom-repeat" items="[[links.bottomEndLinks]]">
+						<a href$="[[item.url]]">[[item.title]]</a>
+					</template>
+			</div>
+		</div>
 
 
 
-  </template>
+	</template>
 
-  <script>
+	<script>
 Polymer({
-  is: 't-footer',
+	is: 't-footer',
 
-  observers:[
-    '_arrangeSocialLinks(contactSection.followUs.platforms.splices, _isMobile)'
-  ],
+	observers:[
+		'_arrangeSecondaryLinks(links.secondaryLinks.options.splices, _isMobile)'
+	],
 
-  properties: {
-    _isMobile:{
-      type: Boolean
-    },
-    _isTablet:{
-      type: Boolean
-    },
-    sections:{
-      type: Array
-    },
-    contactSection:{
-      type: Object,
-      notify: true
-    },
-    copyright: {
-      type: String
-    },
-    footerLinks:{
-      type: Array
-    },
-    _arrangeSocialLinks: {
-      type: String,
-      computed: '_hideIfContentOverflowHappens(contactSection.followUs.platforms.splices,_isMobile)'
-    },
-    _selected:{
-      type: Number,
-      value: 0
-    },
-    _notDesktop: {
-      type: Boolean,
-      // when `first` or `last` changes `computeFullName` is called once
-      // and the value it returns is stored as `fullName`
-      computed: '_isSmallScreen(_isTablet, _isMobile)'
-    },
-    _hideIfNoChildren:{
-      type: Boolean,
-      value: true
-    },
-    numberOfColumns:{
-      type: Number,
-      value: 6,
-      notify: true
-    }
+	properties: {
+		_isMobile:{
+			type: Boolean
+		},
+		_isTablet:{
+			type: Boolean
+		},
+		sections:{
+			type: Object
+		},
+		contactSection:{
+			type: Object,
+			notify: true
+		},
+		links:{
+			type: Object,
+			notify: true,
+			required: true
+		},
+		copyright: {
+			type: String
+		},
+		footerLinks:{
+			type: Array
+		},
+		_arrangeSecondaryLinks: {
+			type: String,
+			computed: '_hideIfContentOverflowHappens(links.secondaryLinks.options.splices,_isMobile)'
+		},
+		_selected:{
+			type: Number,
+			value: 0
+		},
+		_notDesktop: {
+			type: Boolean,
+			// when `first` or `last` changes `computeFullName` is called once
+			// and the value it returns is stored as `fullName`
+			computed: '_isSmallScreen(_isTablet, _isMobile)'
+		},
+		_hideIfNoChildren:{
+			type: Boolean,
+			value: true
+		},
+		numberOfColumns:{
+			type: Number,
+			value: 6,
+			notify: true
+		}
 
-  },
+	},
 
-  ready: function(){
-    this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
-  },
+	ready: function(){
+		this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
+	},
 
-  _isSmallScreen: function(_isTablet, _isMobile){
-    return _isTablet || _isMobile;
-  },
+	_isSmallScreen: function(_isTablet, _isMobile){
+		return _isTablet || _isMobile;
+	},
 
-  _centerAlignIfResponsive: function(_notDesktop){
-    const contactUs = this._hideIfSectionNotPresent(this.contactSection.contactUs.items);
-    const followUs = this._hideIfSectionNotPresent(this.contactSection.followUs.platforms);
-    if(this._isMobile)
-      return "vertical ";
-    if(contactUs !== followUs)
-      return "horizontal center-justified";
-    if(this._hideIfContentOverflowHappens(this.contactSection.followUs.platforms)){
-      return "horizontal center-justified";
-    }
-    return "horizontal";
-  },
+	_centerAlignIfResponsive: function(_notDesktop){
+		const primaryLinks = this._hideIfSectionNotPresent(this.links.primaryLinks.options);
+		const secondaryLinks = this._hideIfSectionNotPresent(this.links.secondaryLinks.options);
+		if(this._isMobile)
+			return "vertical ";
+		if(primaryLinks !== secondaryLinks)
+			return "horizontal center-justified";
+		if(this._hideIfContentOverflowHappens(this.links.secondaryLinks.options)){
+			return "horizontal center-justified";
+		}
+		return "horizontal";
+	},
 
-  _handleFollowAlignment: function(_isMobile){
-    return _isMobile? "center-justified vertical": "end-justified horizontal";
-  },
+	_handleFollowAlignment: function(_isMobile){
+		return _isMobile? "center-justified vertical": "end-justified horizontal";
+	},
 
-  _hideIfNoSections: function(sections){
-    return (!sections || sections.length === 0);
-  },
+	_hideIfNoSections: function(sections){
+		return (!sections || sections.length === 0);
+	},
 
-  _hideIfContentOverflowHappens: function(platforms,_isMobile){
-    return ((platforms && platforms.length> 5) || this._isTablet || this._isMobile);
-  },
+	_hideIfContentOverflowHappens: function(options,_isMobile){
+		return ((options && options.length> 5) || this._isTablet || this._isMobile);
+	},
 
-  _hideSectionIfOverflowOrSectionNotPresent: function(platforms, isMobile){
-    return (this._hideIfNoSections(platforms) || this._hideIfContentOverflowHappens(platforms, isMobile));
-  },
+	_hideSectionIfOverflowOrSectionNotPresent: function(options, isMobile){
+		return (this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(options, isMobile));
+	},
 
-  _hideIfSectionNotPresent: function(items){
-    return !(items && items.length > 0);
-  },
+	_hideIfSectionNotPresent: function(items){
+		return !(items && items.length > 0);
+	},
 
-  _hideIfContactSectionNotPresent: function(contactSection){
-    if(!this.contactSection || (this._hideIfSectionNotPresent(contactSection.contactUs.items) && this._hideIfSectionNotPresent(contactSection.followUs.platforms)))
-      return true;
-    else
-      return false;
-  }
+	_hideIfPrimaryAndSecondaryLinksNotPresent: function(links){
+		if(!this.links || (this._hideIfSectionNotPresent(links.primaryLinks.options) && this._hideIfSectionNotPresent(links.secondaryLinks.options)))
+			return true;
+		else
+			return false;
+	}
 
 });
-  </script>
+	</script>
 </dom-module>
