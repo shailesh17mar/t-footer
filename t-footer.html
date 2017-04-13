@@ -50,20 +50,21 @@
     <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
     <iron-media-query query="(max-width: 1024px) and (min-width: 600px)" query-matches="{{_isTablet}}"></iron-media-query>
     <iron-media-query query="(min-width : 320px) and (max-width : 640px)" query-matches="{{_isMobile}}"></iron-media-query>
+
     <div class="layout footer">
-      <paper-tabs hidden$="[[_hideIfNoSections(sections.options)]]" on-iron-select="_tabChanged" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
+      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections.options]]">
           <paper-tab>[[item.title]]</paper-tab>
         </template>
       </paper-tabs>
 
-      <iron-pages hidden$="[[_hideIfNoSections(sections.options)]]" class="pages flex vertical layout " selected="{{_selected}}">
+      <iron-pages class="pages flex vertical layout " selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections.options]]">
           <div>
             <ul class="items">
               <template is="dom-if" if="[[!sections.openInNewTab]]" >
                 <template is="dom-repeat" items="[[item.options]]" as="option">
-                  <li><a href$="[[option.url]]">[[option.title]]</a></li>
+                  <li><a href$="[[option.url]]" target$="[[_setBlankIfToBeOpenedInNewTab(sections.openInNewTab, option.openInNewTab)]]">[[option.title]]</a></li>
                 </template>
               </template>
               <template is="dom-if" if="[[sections.openInNewTab]]" >
@@ -75,8 +76,9 @@
           </div>
         </template>
       </iron-pages>
-      <div hidden$="[[_hideIfPrimaryAndSecondaryLinksNotPresent(links)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout contact-section section">
-        <div hidden$="[[_hideIfSectionNotPresent(links.primaryLinks.options)]]" class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout contact-us" >
+
+      <div hidden$="[[_hideIfPrimaryAndSecondaryLinksNotPresent(links)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout links-section section">
+        <div hidden$="[[_hideIfNullOrEmpty(links.primaryLinks)]]" class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout primary-links" >
           <div class="contact-label">[[links.primaryLinks.title]]</div>
           <div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
             <template is="dom-repeat" items="[[links.primaryLinks.options]]" >
@@ -88,7 +90,7 @@
             </template>
           </div>
         </div>
-        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links.secondaryLinks.options, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout follow-us"  >
+        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout secondary-links" >
           <div class="contact-label">[[links.secondaryLinks.title]]</div>
           <div id="social" class="social-links">
             <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
@@ -97,7 +99,8 @@
           </div>
         </div>
       </div>
-      <div class$="[[ _centerAlignIfResponsive(_notDesktop) ]] contact-section layout follow-us" hidden$="[[!_hideIfContentOverflowHappens(links.secondaryLinks.options, _isMobile)]]" >
+
+      <div hidden$="[[!_hideSectionIfOverflowOrSectionNotPresent(links, _isMobile)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
         <div class="contact-label">[[links.secondaryLinks.title]]</div>
         <div class="social-links">
           <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
@@ -105,42 +108,35 @@
           </template>
         </div>
       </div>
-      <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal copyright-section section">
+      <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal bottom-section section">
         <content></content>
       </div>
-      <div class="layout horizontal copyright-section section">
-        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout links" >
-          <ul class="flex link-list">
+      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="layout horizontal bottom-section section">
+        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout bottom-start-links" >
+          <ul class$="flex link-list [[_centerJustifyIfBottomEndSectionNotPresent(links)]]">
             <template is="dom-repeat" items="[[links.bottomStartLinks]]">
               <li><a href$="[[item.url]]">[[item.title]]</a></li>
             </template>
           </ul>
         </div>
 
-        <div hidden$="[[_notDesktop]]"  class="copyright end-justified">
+        <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="copyright bottom-end-links end-justified">
           <template is="dom-repeat" items="[[links.bottomEndLinks]]">
             <a href$="[[item.url]]">[[item.title]]</a>
           </template>
         </div>
       </div>
-      <div hidden$="[[!_notDesktop]]"  class="copyright-section section horizontal layout center-justified">
+      <div hidden$="[[!_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="bottom-end-links bottom-section section horizontal layout center-justified">
         <template is="dom-repeat" items="[[links.bottomEndLinks]]">
           <a href$="[[item.url]]">[[item.title]]</a>
         </template>
       </div>
     </div>
-
-
-
   </template>
 
   <script>
 Polymer({
   is: 't-footer',
-
-  observers:[
-    '_arrangeSecondaryLinks(links.secondaryLinks.options.splices, _isMobile)'
-  ],
 
   properties: {
 
@@ -167,7 +163,9 @@ Polymer({
      * @type {{title: String, options: Array}}
      */
     sections:{
-      type: Object
+      type: Object,
+      value: null,
+      notify: true
     },
 
     /**
@@ -178,12 +176,8 @@ Polymer({
     links:{
       type: Object,
       notify: true,
-      required: true
-    },
+      value: null
 
-    _arrangeSecondaryLinks: {
-      type: String,
-      computed: '_hideIfContentOverflowHappens(links.secondaryLinks.options.splices,_isMobile)'
     },
 
     /** returns index of selected tab*/
@@ -210,7 +204,7 @@ Polymer({
 
   ready: function(){
     this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
-    if(this.sections.selectedIndex)
+    if(this.sections && this.sections.selectedIndex)
       this._selected = this.sections.selectedIndex;
   },
 
@@ -219,13 +213,13 @@ Polymer({
   },
 
   _centerAlignIfResponsive: function(_notDesktop){
-    const primaryLinks = this._hideIfSectionNotPresent(this.links.primaryLinks.options);
-    const secondaryLinks = this._hideIfSectionNotPresent(this.links.secondaryLinks.options);
+    const primaryLinks = this._hideIfNullOrEmpty(this.links.primaryLinks);
+    const secondaryLinks = this._hideIfNullOrEmpty(this.links.secondaryLinks);
     if(this._isMobile)
       return "vertical ";
     if(primaryLinks !== secondaryLinks)
       return "horizontal center-justified";
-    if(this._hideIfContentOverflowHappens(this.links.secondaryLinks.options)){
+    if(!this._hideIfNullOrEmpty(this.links.secondaryLinks) && this._hideIfContentOverflowHappens(this.links)){
       return "horizontal center-justified";
     }
     return "horizontal";
@@ -239,12 +233,20 @@ Polymer({
     return (!sections || sections.length === 0);
   },
 
-  _hideIfContentOverflowHappens: function(options,_isMobile){
-    return ((options && options.length> 5) || this._isTablet || this._isMobile);
+  _hideIfContentOverflowHappens: function(links,_isMobile){
+    if(links.secondaryLinks){
+      var options = links.secondaryLinks.options;
+      return ((options && options.length> 5) || this._isTablet || this._isMobile);
+    }
+    return false;
   },
 
-  _hideSectionIfOverflowOrSectionNotPresent: function(options, isMobile){
-    return (this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(options, isMobile));
+  _hideSectionIfOverflowOrSectionNotPresent: function(links, isMobile){
+    var secondaryLinks = links.secondaryLinks;
+    if(secondaryLinks){
+      var options = secondaryLinks.options;
+      return this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, isMobile);
+    }
   },
 
   _hideIfSectionNotPresent: function(items){
@@ -252,10 +254,14 @@ Polymer({
   },
 
   _hideIfPrimaryAndSecondaryLinksNotPresent: function(links){
-    if(!this.links || (this._hideIfSectionNotPresent(links.primaryLinks.options) && this._hideIfSectionNotPresent(links.secondaryLinks.options)))
-      return true;
+    if(!links || (this._hideIfNullOrEmpty(links.primaryLinks) && this._hideIfNullOrEmpty(links.secondaryLinks)))
+    return true;
     else
-      return false;
+    return false;
+  },
+
+  _hideIfNullOrEmpty: function(sections){
+    return !(sections && sections.options && sections.options.length > 0);
   },
 
   _tabChanged:function(e, index){
@@ -269,8 +275,34 @@ Polymer({
       sections: this.sections,
       links: this.links
     };
+  },
+
+  _centerJustifyIfBottomEndSectionNotPresent: function(links){
+    if(!links.bottomEndLinks || !links.bottomStartLinks){
+      return "center-justified horizontal layout ";
+    }
+    return "";
+  },
+
+  _centerJustifyIfBottomStartSectionNotPresent: function(links){
+    if(!links.bottomStartLinks){
+      return "center-justified";
+    }
+    return "end-justified";
+  },
+
+  _hideSectionIfDesktopOrNoStartLinks: function(links, notDesktop){
+    var bottomStartLinks = links.bottomStartLinks;
+    return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop)
+  },
+
+  _setBlankIfToBeOpenedInNewTab: function(openSectionsInNewTab, openItemInNewTab){
+    if(openSectionsInNewTab || openItemInNewTab){
+      return '_blank';
+    }
+    return '';
   }
 
 });
-  </script>
+</script>
 </dom-module>
