@@ -33,12 +33,15 @@
   `--t-footer-section-bg` | Background color footer sections | `#9a9ca8`
   `--t-footer-color` | Background color of tab content | `#465363`
   `--t-footer-bg` | Background color footer | `#465363`
-  `--t-footer-selected-tab-bg` | Background color of selected Tab | `#465363`
   `--t-footer-selected-tab-color` | Text color of selected Tab | `#fff`
   `--t-footer-tab-bg` | Background color of Tabs | `#39434f`
   `--t-footer-tab-color` | Default tab text color| `#9a9ca8`
   `--t-footer-link-title-color` | Title colors of primary & secondary links | `#fff`
   `--t-footer-links-bg` | Background color of primary & secondary links| `#39434f`
+  `--t-footer-section-link` |  Mixin for section color | `{}`
+  `--t-footer-primary-link` |  Mixin for section color | `{}`
+  `--t-footer-secondary-link` |  Mixin for section color | `{}`
+  `--t-footer-bottom-link` |  Mixin for section color | `{}`
 
 	@group Travelnxt Elements
 	@element t-footer
@@ -52,7 +55,7 @@
     <iron-media-query query="(min-width : 320px) and (max-width : 640px)" query-matches="{{_isMobile}}"></iron-media-query>
 
     <div class="layout footer">
-      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable noink no-bar selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
+      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections.options]]">
           <paper-tab>[[item.title]]</paper-tab>
         </template>
@@ -64,12 +67,12 @@
             <ul class="items">
               <template is="dom-if" if="[[!sections.openInNewTab]]" >
                 <template is="dom-repeat" items="[[item.options]]" as="option">
-                  <li><a href$="[[option.url]]" target$="[[_setBlankIfToBeOpenedInNewTab(sections.openInNewTab, option.openInNewTab)]]">[[option.title]]</a></li>
+                  <li><a href$="[[option.url]]" target$="[[_setBlankIfToBeOpenedInNewTab(sections.openInNewTab, option.openInNewTab)]]" class="section-link">[[option.title]]</a></li>
                 </template>
               </template>
               <template is="dom-if" if="[[sections.openInNewTab]]" >
                 <template is="dom-repeat" items="[[item.options]]" as="option">
-                  <li><a target="_blank" href$="[[option.url]]">[[option.title]]</a></li>
+                  <li><a target="_blank" class="section-link" href$="[[option.url]]">[[option.title]]</a></li>
                 </template>
               </template>
             </ul>
@@ -84,7 +87,7 @@
             <template is="dom-repeat" items="[[links.primaryLinks.options]]" >
               <div >[[item.title]]
                 <template is="dom-repeat" items="[[item.options]]" as="option" >
-                  <a href$="[[option.url]]">[[option.title]]</a>
+                  <a href$="[[option.url]]" class="primary-link">[[option.title]]</a>
                 </template>
               </div>
             </template>
@@ -94,7 +97,7 @@
           <div class="contact-label">[[links.secondaryLinks.title]]</div>
           <div id="social" class="social-links">
             <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
-              <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
+              <a href$="[[item.url]]" class="secondary-link"><iron-icon src="[[item.icon]]"></iron-icon></a>
             </template>
           </div>
         </div>
@@ -104,31 +107,31 @@
         <div class="contact-label">[[links.secondaryLinks.title]]</div>
         <div class="social-links">
           <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
-            <a href$="[[item.url]]"><iron-icon src="[[item.icon]]"></iron-icon></a>
+            <a href$="[[item.url]]" class="secondary-link"><iron-icon src="[[item.icon]]"></iron-icon></a>
           </template>
         </div>
       </div>
       <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal bottom-section section">
         <content></content>
       </div>
-      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="layout horizontal bottom-section section">
+      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, true)]]" class="layout horizontal bottom-section section">
         <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout bottom-start-links" >
-          <ul class$="flex link-list [[_centerJustifyIfBottomEndSectionNotPresent(links)]]">
+          <ul class="layout horizontal flex link-list ">
             <template is="dom-repeat" items="[[links.bottomStartLinks]]">
-              <li><a href$="[[item.url]]">[[item.title]]</a></li>
+              <li><a href$="[[item.url]]" class="bottom-link">[[item.title]]</a></li>
             </template>
           </ul>
         </div>
 
         <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="copyright bottom-end-links end-justified">
           <template is="dom-repeat" items="[[links.bottomEndLinks]]">
-            <a href$="[[item.url]]">[[item.title]]</a>
+            <a href$="[[item.url]]" class="bottom-link">[[item.title]]</a>
           </template>
         </div>
       </div>
       <div hidden$="[[!_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="bottom-end-links bottom-section section horizontal layout center-justified">
         <template is="dom-repeat" items="[[links.bottomEndLinks]]">
-          <a href$="[[item.url]]">[[item.title]]</a>
+          <a href$="[[item.url]]" class="bottom-link">[[item.title]]</a>
         </template>
       </div>
     </div>
@@ -293,7 +296,7 @@ Polymer({
 
   _hideSectionIfDesktopOrNoStartLinks: function(links, notDesktop){
     var bottomStartLinks = links.bottomStartLinks;
-    return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop)
+    return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop) 
   },
 
   _setBlankIfToBeOpenedInNewTab: function(openSectionsInNewTab, openItemInNewTab){
