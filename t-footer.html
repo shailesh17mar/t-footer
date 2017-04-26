@@ -51,8 +51,8 @@
 <dom-module id="t-footer">
   <template>
     <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
-    <iron-media-query query="(min-width : 320px) and (max-width : 640px)" query-matches="{{_isMobile}}"></iron-media-query>
-    <iron-media-query query="(max-width: 1024px) and (min-width: 600px)" query-matches="{{_isTablet}}"></iron-media-query>
+    <iron-media-query query="(min-width : 320px) and (max-width : 767px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px) and (min-width: 768px)" query-matches="{{_isTablet}}"></iron-media-query>
 
     <div class="layout footer">
       <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
@@ -141,8 +141,11 @@
 Polymer({
   is: 't-footer',
 
-  properties: {
+  listeners:{
+    't-footer-section-select': '_changeSelectedSection'
+  },
 
+  properties: {
 /**
 		 * Fired when tab is changed
 		 *
@@ -202,7 +205,6 @@ Polymer({
       type: Boolean,
       value: true
     }
-
   },
 
   ready: function(){
@@ -279,6 +281,10 @@ Polymer({
   _hideSectionIfDesktopOrNoStartLinks: function(links, notDesktop){
     var bottomStartLinks = links.bottomStartLinks;
     return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop) 
+  },
+
+  _changeSelectedSection: function(e, detail){
+    this.sections.selectedIndex = detail.index;
   }
 
 });

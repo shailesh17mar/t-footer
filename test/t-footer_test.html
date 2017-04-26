@@ -1554,12 +1554,19 @@
       });
     });
 
+    test('should change selectedindex on t-footer-section-select event', function(done){
+      footer.fire('t-footer-section-select', {index: 3});
+      flush(function(){
+        assert.equal(footer.sections.selectedIndex, 3);
+        done();
+      });
+    });
+
     test('should center align on mobile', function(){
       var mq= footer.querySelector('iron-media-query');
       mq.query = '(min-width: 1026px)';
       assert.equal(true, true);
     });
-
   })
   </script>
 
