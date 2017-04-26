@@ -51,8 +51,8 @@
 <dom-module id="t-footer">
   <template>
     <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
-    <iron-media-query query="(max-width: 1024px) and (min-width: 600px)" query-matches="{{_isTablet}}"></iron-media-query>
     <iron-media-query query="(min-width : 320px) and (max-width : 640px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px) and (min-width: 600px)" query-matches="{{_isTablet}}"></iron-media-query>
 
     <div class="layout footer">
       <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
@@ -67,7 +67,7 @@
             <ul class="items">
               <template is="dom-if" if="[[!sections.openInNewTab]]" >
                 <template is="dom-repeat" items="[[item.options]]" as="option">
-                  <li><a href$="[[option.url]]" target$="[[_setBlankIfToBeOpenedInNewTab(sections.openInNewTab, option.openInNewTab)]]" class="section-link">[[option.title]]</a></li>
+                  <li><a href$="[[option.url]]" class="section-link">[[option.title]]</a></li>
                 </template>
               </template>
               <template is="dom-if" if="[[sections.openInNewTab]]" >
@@ -252,10 +252,6 @@ Polymer({
     }
   },
 
-  _hideIfSectionNotPresent: function(items){
-    return !(items && items.length > 0);
-  },
-
   _hideIfPrimaryAndSecondaryLinksNotPresent: function(links){
     if(!links || (this._hideIfNullOrEmpty(links.primaryLinks) && this._hideIfNullOrEmpty(links.secondaryLinks)))
     return true;
@@ -280,30 +276,9 @@ Polymer({
     };
   },
 
-  _centerJustifyIfBottomEndSectionNotPresent: function(links){
-    if(!links.bottomEndLinks || !links.bottomStartLinks){
-      return "center-justified horizontal layout ";
-    }
-    return "";
-  },
-
-  _centerJustifyIfBottomStartSectionNotPresent: function(links){
-    if(!links.bottomStartLinks){
-      return "center-justified";
-    }
-    return "end-justified";
-  },
-
   _hideSectionIfDesktopOrNoStartLinks: function(links, notDesktop){
     var bottomStartLinks = links.bottomStartLinks;
     return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop) 
-  },
-
-  _setBlankIfToBeOpenedInNewTab: function(openSectionsInNewTab, openItemInNewTab){
-    if(openSectionsInNewTab || openItemInNewTab){
-      return '_blank';
-    }
-    return '';
   }
 
 });

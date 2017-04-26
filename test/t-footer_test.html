@@ -1368,8 +1368,8 @@
       footerWithoutPrimaryAndSecondaryLinks.sections = sections;
       footerWithoutPrimaryAndSecondaryLinks.links = links;
     }
-    function setupFooterWithoutSections(){
 
+    function setupFooterWithoutSections(){
       var links={
         "primaryLinks": {
           "title": "Contact Us",
@@ -1470,7 +1470,10 @@
     });
 
     test('instantiating the element works', function() {
+      flush(function(){
       assert.equal(footer.is, 't-footer');
+      assert.equal(footer._selected, footer.sections.selectedIndex);
+      });
     });
 
     test('should not display tabs and pages if sections is not provided', function() {
@@ -1542,6 +1545,19 @@
         assert.equal(true, true);
         done();
       })
+    });
+
+    test('getState should return the current footer state', function(){
+      flush(function(){
+        var state = footer.getState();
+        assert.deepEqual(state.data, footer.data);
+      });
+    });
+
+    test('should center align on mobile', function(){
+      var mq= footer.querySelector('iron-media-query');
+      mq.query = '(min-width: 1026px)';
+      assert.equal(true, true);
     });
 
   })
