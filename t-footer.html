@@ -81,7 +81,7 @@
       </iron-pages>
 
       <div hidden$="[[_hideIfPrimaryAndSecondaryLinksNotPresent(links)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout links-section section">
-        <div hidden$="[[_hideIfNullOrEmpty(links.primaryLinks)]]" class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout primary-links" >
+        <div hidden$="[[_hideIfNullOrEmpty(links.primaryLinks)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] flex layout primary-links" >
           <div class="contact-label">[[links.primaryLinks.title]]</div>
           <div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
             <template is="dom-repeat" items="[[links.primaryLinks.options]]" >
@@ -93,7 +93,7 @@
             </template>
           </div>
         </div>
-        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _isMobile)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout secondary-links" >
+        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout secondary-links" >
           <div class="contact-label">[[links.secondaryLinks.title]]</div>
           <div id="social" class="social-links">
             <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <div hidden$="[[!_hideSectionIfOverflowOrSectionNotPresent(links, _isMobile)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
+      <div hidden$="[[!_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
         <div class="contact-label">[[links.secondaryLinks.title]]</div>
         <div class="social-links">
           <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
@@ -213,8 +213,8 @@ Polymer({
       this._selected = this.sections.selectedIndex;
   },
 
-  _isSmallScreen: function(_isTablet, _isMobile){
-    return _isTablet || _isMobile;
+  _isSmallScreen: function(isTablet, isMobile){
+    return isTablet || isMobile;
   },
 
   _centerAlignIfResponsive: function(_notDesktop){
@@ -246,11 +246,11 @@ Polymer({
     return false;
   },
 
-  _hideSectionIfOverflowOrSectionNotPresent: function(links, isMobile){
+  _hideSectionIfOverflowOrSectionNotPresent: function(links, notDesktop){
     var secondaryLinks = links.secondaryLinks;
     if(secondaryLinks){
       var options = secondaryLinks.options;
-      return this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, isMobile);
+      return this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, notDesktop);
     }
   },
 
