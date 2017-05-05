@@ -55,7 +55,7 @@
     <iron-media-query query="(max-width: 1024px) and (min-width: 768px)" query-matches="{{_isTablet}}"></iron-media-query>
 
     <div class="layout footer">
-      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
+      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" noink on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
         <template is="dom-repeat" items="[[sections.options]]">
           <paper-tab>[[item.title]]</paper-tab>
         </template>
