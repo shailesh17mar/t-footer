@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <div hidden$="[[!_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
+      <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop, _toToggle)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
         <div class="contact-label">[[links.secondaryLinks.title]]</div>
         <div class="social-links">
           <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
@@ -114,7 +114,7 @@
       <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal bottom-section section">
         <content></content>
       </div>
-      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, true)]]" class="layout horizontal bottom-section section">
+      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links)]]" class="layout horizontal bottom-section section">
         <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout bottom-start-links" >
           <ul class="layout horizontal link-list ">
             <template is="dom-repeat" items="[[links.bottomStartLinks]]">
@@ -156,6 +156,11 @@ Polymer({
     /** returns true if the device is mobile*/
     _isMobile:{
       type: Boolean
+    },
+
+    _toToggle:{
+      type: Boolean,
+      value: true
     },
 
     /** returns true if the device is tablet*/
@@ -246,12 +251,14 @@ Polymer({
     return false;
   },
 
-  _hideSectionIfOverflowOrSectionNotPresent: function(links, notDesktop){
+  _hideSectionIfOverflowOrSectionNotPresent: function(links, notDesktop, toToggle){
     var secondaryLinks = links.secondaryLinks;
     if(secondaryLinks){
       var options = secondaryLinks.options;
-      return this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, notDesktop);
+      let result = this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, notDesktop);
+      return toToggle? !result : result;
     }
+    return true;
   },
 
   _hideIfPrimaryAndSecondaryLinksNotPresent: function(links){
